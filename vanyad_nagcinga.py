@@ -17,8 +17,6 @@
 import time
 import pipes
 import livestatus
-from pyswip import Prolog
-from subprocess import call
 from vanyad_shelves import *
 
 class ConnectLivestatus:
@@ -38,50 +36,4 @@ class ConnectLivestatus:
 	get_command='\n'.join(command)
 	status=livestatus.SingleSiteConnection(self.socket_path).query_table(get_command)
 	return status
-
-class ConnectProlog(ConnectLivestatus):
-    """As it is senseless to call Prolog without starting a connection to Nagios/Icinga, this module does it."""
-    def __init__(self):
-	prolog=None
-	ConnectLivestatus.__init__(self)
-	self.prolog=Prolog()
-	self.prolog.consult('vanyad.pl')
-
-class ConnectNagCinga:
-    """This class sends commands to Nagios/Icinga"""
-    user=None
-    t=None
-    f=None
-    commandfile=None
-    
-    def __init__(self):
-	config=ReadConf()
-	self.user=config.user
-	self.commandfile=config.socket_command
-	self.t=pipes.Template()
-
-    def acknowledge_host(self,host,sticky,notify,persistent,comment):
-	t_check=time.time()
-	t_stamp=int(str(round(t_check)).rstrip('0').rstrip('.'))
-        msg='['+str(t_stamp)+'] ACKNOWLEDGE_HOST_PROBLEM;'+host+';'+str(sticky)+';'+str(notify)+';'+str(persistent)+';'+self.user+';'+comment+'\n'
-	self.f=self.t.open(self.commandfile, 'w')
-	self.f.write(msg)
-	self.f.close()
-
-    def acknowledge_service(self,host,service,sticky,notify,persistent,comment):
-	t_check=time.time()
-	t_stamp=int(str(round(t_check)).rstrip('0').rstrip('.'))
-        msg='['+str(t_stamp)+'] ACKNOWLEDGE_SVC_PROBLEM;'+host+';'+service+';'+str(sticky)+';'+str(notify)+';'+str(persistent)+';'+self.user+';'+comment+'\n'
-	self.f=self.t.open(self.commandfile, 'w')
-	self.f.write(msg)
-	self.f.close()
-
-    def process_host(self,host,state,comment):
-	t_check=time.time()
-	t_stamp=int(str(round(t_check)).rstrip('0').rstrip('.'))
-	msg='['+str(t_stamp)+'] PROCESS_HOST_CHECK_RESULT;'+host+';'+state+';'+comment+'\n'
-	self.f=self.t.open(self.commandfile, 'w')
-	self.f.write(msg)
-	self.f.close()
-
 

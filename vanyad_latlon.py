@@ -41,15 +41,8 @@ class GenerateCoordinates(ConnectLivestatus):
     default_lon=None
 
     def __init__(self):
-	self.config=ReadConf()
 	ConnectLivestatus.__init__(self)
 	self.mapdata=OpenShelves('osm')
-	coors=self.config.no_data.split(',')
-	self.default_lat=float(coors[0])
-	self.default_lon=float(coors[1])
-
-    def __del__(self):
-	self.mapdata.__del__()
 
     def grab_addresses(self):
 	location_keys=None
@@ -419,7 +412,6 @@ if __name__ == '__main__':
     bit.fill_data()
     bit.make_generic()
     bit.create_nagvis_geobase()
-    bit.Experimental4()
-    bit.__del__()
+#    bit.Experimental4()
 
 
