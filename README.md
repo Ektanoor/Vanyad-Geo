@@ -13,40 +13,51 @@ Presently, the main script is vanyad_latlon.py. It creates a series of configura
 ------------
 Requirements:
  A working Nagios/Icinga system.
+ 
  Python 2.7, not the 3.x versions. This is an issue of compatibility with modules still working under the 2.* branch.
  On python you have have these modules installed:
-  -shelve
-  -ConfigParser
-  -collections
-  -time
-  -pipes
-  -unidecode
-  -httplib
-  -urllib
-  -json
+ 
+ -shelve
+ 
+ -ConfigParser
+ 
+ -collections
+ 
+ -time
+ 
+ -pipes
+ 
+ -unidecode
+ 
+ -httplib
+ 
+ -urllib
+ 
+ -json
 
  Obviously you will need Nagvis. Better to use version 1.7.2 and forward.
  Livestatus (http://mathias-kettner.de/checkmk_livestatus.html) is a must.
+ 
  A direct connection to nominatim.openstreetmap.org
 
 Some notes on requirements:
 
- -The program was written in python as its "origin" came from Livestatus, which is mostly written in python and 
- capable of sending python formatted data to other programs.
+ -The program was written in python as its "origins" came from working with Livestatus, which is mostly 
+  written in python and capable of sending python formatted data to other programs.
 
  -It uses Livestatus to gather information on hosts from Nagios/Icinga. Possibly, with some tweaking to the code,
- it may work for services and other Nagios/Icinga objects. The main requirement for the Nagios/Icinga hosts is
- that they shall carry a custom variable "_location", with specific parameters (see below).
+  it may work for services and other Nagios/Icinga objects. The main requirement for the Nagios/Icinga hosts is
+  that they shall carry a custom variable "_location", with specific parameters (see below).
 
- Also, with some serious tweaking to the code, it may not need Livestatus. However, here, we use it,
- we have strict, near real-time requirements, so, it would be nonsense to seek other alternatives.
+  With some serious tweaking to the code, it may not need Livestatus at all. However, here, we use it, as
+  we have strict, near real-time requirements. Frankly, it would be nonsense to seek other alternatives.
 
  -The program uses nominatim.openstreetmap.org to get coordinates and other information for each host. For 
- this we need the httplib,urllib and json modules.
+  this we need the httplib,urllib and json modules.
 
- There are some restrictions on the use of Nominatim. Besides, it would be a costly nonsense to produce 
- repeated queries for one and the same location. So we use the module "shelve" to create something similar
- to a "cache".
+  There are some restrictions on the use of Nominatim. Besides, it would be a costly nonsense to produce 
+  repeated queries for one and the same location. So we use the module "shelve" to create something similar
+  to a "cache".
 
  -To create unique filenames, data from Nominatim is used. However, many names come in the national languages
   of the countries where hosts are located. Sometimes, these names carry codes which the file systems consider unacceptable.
@@ -56,9 +67,9 @@ Some notes on requirements:
 -------------
 Installation:
  -Create a working dir. Ex. Vanyad-Geo. Copy all the vanyad-*.py files into that dir.
- DO NOT INSTALL vanyad_latlon.py and other vanyad* modules in the standard python tree! It will surely create a 
- mess. Currently, vanyas_latlon is configured such a way that it will create several dirs under its working directory.
- How many? This fully depends on the number of locations you have and some properties they possess. 
+  DO NOT INSTALL vanyad_latlon.py and other vanyad* modules in the standard python tree! It will surely create a 
+  mess. Currently, vanyas_latlon is configured such a way that it will create several dirs under its working directory.
+  How many? This fully depends on the number of locations you have and some properties they possess. 
 
  -You have to copy the file [check_mk|livestatus dir]/api/python/livestatus.py to your working directory.
 
@@ -86,8 +97,8 @@ Installation:
   For example, if you have a "Market Avenue" and a "Market Road", you have to give the full name for 
   the road/street.
 
-  Meanwhile there are cities where you may have several roads carrying one and the same name. For example, here, we have some seven
-  "Garden Roads" (official names and completely different roads). To distinguish them, we need a separate variable, in our case,
+  Meanwhile, there are cities with several roads carrying one and the same name. For example, here, we have some seven
+  "Garden Roads" (official names but completely different roads). To distinguish them, we need a separate variable, in our case,
   the postal index or Nominatim's "postcode". This parameter is only needed on those places where this confusion may arise.
 
   Note - After adding _location to all hosts you need, you have to restart Nagios/Icinga
