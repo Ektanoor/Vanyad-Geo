@@ -79,7 +79,7 @@ Installation:
          _location               de,Lower Saxony,Wolfsburg,Heinrich-Nordhoff-Straße,69
         }
 
-  Note that field <postcode> is facultative (see below)
+  Note that field "postcode" is facultative (see below)
 
   The names shall be the closest possible to their equivalents in Nominatim. It is acceptable to use partial names,
   as Nominatim is frequently able to give the correct data under partial info. However this is not always the case.
