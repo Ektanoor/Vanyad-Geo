@@ -67,9 +67,9 @@ Installation:
 
         _location      country_code,state,city/county,street/road,<postcode>
 
-        Ex. _location  ru,Central Administrative Okrug,Москва,Ленинградский Проспект,47
+   Ex. _location  ru,Central Administrative Okrug,Москва,Ленинградский Проспект,47
 
-        A more complete example:
+   A more complete example:
 
         define host{
          use                     sw-template,host-pnp
@@ -79,7 +79,7 @@ Installation:
          _location               de,Lower Saxony,Wolfsburg,Heinrich-Nordhoff-Straße,69
         }
 
-        (Note - <postcode> is facultative)
+  Note that field <postcode> is facultative (see below)
 
   The names shall be the closest possible to their equivalents in Nominatim. It is acceptable to use partial names,
   as Nominatim is frequently able to give the correct data under partial info. However this is not always the case.
@@ -134,4 +134,4 @@ Some notes on lauching:
  but not impossible. OpenStreetMap itself has semantic bases that attempt to help or solve these discrepancies. So this is one of the TODO's
  of this program.
 
-Well, for the momente, that's all folks...
+Well, for the moment, that's all folks...
