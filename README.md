@@ -86,7 +86,7 @@ Installation:
   For example, if you have a "Market Avenue" and a "Market Road", you have to give the full name for 
   the road/street.
 
-  Meanwhile there are cities where you may have several roads with one and the same name. For example, here, we have some seven
+  Meanwhile there are cities where you may have several roads carrying one and the same name. For example, here, we have some seven
   "Garden Roads" (official names and completely different roads). To distinguish them, we need a separate variable, in our case,
   the postal index or Nominatim's "postcode". This parameter is only needed on those places where this confusion may arise.
 
@@ -110,7 +110,7 @@ Launching:
 
  geomap dir - Inside you have the lists of hosts with their coordinates. Copy those files (not dirs!) you need to /etc/nagvis/geomap.
  
- maps dir - These are the configurations maps. As above, copy the necessary files (not dirs!) to the /etc/nagvis/maps.
+ maps dir - These are the configuration maps. As above, copy the necessary files (not dirs!) to the /etc/nagvis/maps.
 
  Note - If you have installed Nagvis config in other place, you have to find it and copy the files to their corresponding dirs.
  Warning - NEVER EVER try to create a direct/automatic copy of these files to Nagvis. Depending on your mileage, this data may 
