@@ -17,15 +17,13 @@ Requirements:
  Python 2.7, not the 3.x versions. This is an issue of compatibility with modules still working under the 2.* branch.
  On python you have have these modules installed:
  
- -shelve
- 
  -ConfigParser
+ 
+ -shelve
  
  -collections
  
  -time
- 
- -pipes
  
  -unidecode
  
