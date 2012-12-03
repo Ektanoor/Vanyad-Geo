@@ -23,8 +23,6 @@ Requirements:
  
  -collections
  
- -time
- 
  -unidecode
  
  -httplib
