@@ -66,10 +66,12 @@ Some notes on requirements:
 
 -------------
 Installation:
+
  -Create a working dir. Ex. Vanyad-Geo. Copy all the vanyad-*.py files into that dir.
+ 
   DO NOT INSTALL vanyad_latlon.py and other vanyad* modules in the standard python tree! It will surely create a 
-  mess. Currently, vanyas_latlon is configured such a way that it will create several dirs under its working directory.
-  How many? This fully depends on the number of locations you have and some properties they possess. 
+  mess. Currently, vanyad_latlon is configured such a way that it will create several dirs under its working directory.
+  How many? This fully depends on the number of locations you have and some properties they possess in Nominatim. 
 
  -You have to copy the file [check_mk|livestatus dir]/api/python/livestatus.py to your working directory.
 
@@ -126,7 +128,8 @@ Launching:
  maps dir - These are the configuration maps. As above, copy the necessary files (not dirs!) to the /etc/nagvis/maps.
 
  Note - If you have installed Nagvis config in other place, you have to find it and copy the files to their corresponding dirs.
- Warning - NEVER EVER try to create a direct/automatic copy of these files to Nagvis. Depending on your mileage, this data may 
+ 
+ Warning - NEVER EVER try to create a direct/automatic copy of all these files to Nagvis. Depending on your mileage, this data may 
            become enormous and Nagvis behaves badly when the number of maps reaches a few tens.
 
  ambiguous_data.txt - Data that the program found ambiguous - wrong roads, wrong house numbers, etc. This checking is far from perfect 
