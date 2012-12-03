@@ -107,7 +107,9 @@ Installation:
 
           [monitor]
           system=icinga
-
+ 
+ Change "system" to your real system - nagios or icinga.
+ 
  If your Nagios/Icinga dir is in a different location from the standard installation, you may have to add:
 
         monitor_dir=<your Nagios/Icinga working dir> (Ex. /var/lib/icinga/)
