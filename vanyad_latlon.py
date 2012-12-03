@@ -45,9 +45,11 @@ class GenerateCoordinates(ConnectLivestatus):
 	self.mapdata=OpenShelves('osm')
 
     def grab_addresses(self):
+	outcasts='outcasts.txt'
 	location_keys=None
 	postcode=None
 
+	f=open(outcasts,'w')
 #We need these keys to avoid beating OSM with repeated queries
 	if self.mapdata: location_keys=self.mapdata.osm.keys()
 
@@ -81,11 +83,27 @@ class GenerateCoordinates(ConnectLivestatus):
 	    response=conn.getresponse()
 	    if response.status==200:
 		data=response.read()
-		if not data: print('No data for: '+str(location)+'\n',file=f)
+		if not data: print('No data for: '+str(location),file=f)
 		else:
 		    data=json.loads(data)
 		    self.mapdata.osm[location]=data
 	conn.close()
+	f.close()
+
+    def convert_listuple(self,convert):
+	""" A small function to decode unicode on tuples and arrays
+	"""
+	msg=''
+
+	if type(convert)==list or type(convert)==tuple:
+	    for item in convert: msg+=self.convert_listuple(item)+'\n'
+	elif type(convert)==dict:
+	    for item in convert: msg+=self.convert_listuple(item)+' : '+self.convert_listuple(convert[item])+'\n'
+	else:
+	    conv_str=str(convert)
+	    msg=conv_str.decode('utf8')
+	return msg
+
 
 #On Nominatim fields inside records do not seem to be strictly positioned. Besides, the system is flexible enough to give data that partially fits the query.
 #So, to avoid multiple conflicts, first we read a whole record and then check.
@@ -154,14 +172,14 @@ class GenerateCoordinates(ConnectLivestatus):
 		if other_fields:
 		    print('Custom fields found for '+str(location)+':\n',file=f)
 		    for field in other_fields: print(field+': '+other_fields[field]+'\n',file=f)
-		    print(str(self.mapdata.osm[location])+'\n',file=f)
+		    print(self.convert_listuple(self.mapdata.osm[location])+'\n',file=f)
 
 		msg=None
-		if not cur_road: print('No road for: '+str(location)+'\n'+str(self.mapdata.osm[location])+'\n',file=f)
-		elif road not in cur_road: print('Wrong road for: '+str(location)+'\n'+str(cur_road)+'\n'+str(self.mapdata.osm[location])+'\n',file=f)
-		if not cur_house_number: msg='No house number for: '+str(location)+'\n'+str(self.mapdata.osm[location])+'\n'
+		if not cur_road: print('No road for: '+str(location)+'\n'+self.convert_listuple(self.mapdata.osm[location])+'\n',file=f)
+		elif road not in cur_road: print('Wrong road for: '+str(location)+'\n'+self.convert_listuple(cur_road)+'\n'+self.convert_listuple(self.mapdata.osm[location])+'\n',file=f)
+		if not cur_house_number: msg='No house number for: '+str(location)+'\n'+self.convert_listuple(self.mapdata.osm[location])+'\n'
 		elif house_number!=cur_house_number[:len(house_number)]:
-		    msg='Wrong house number for: '+str(location)+'\n'+str(cur_house_number)+'\n'+str(self.mapdata.osm[location])+'\n'
+		    msg='Wrong house number for: '+str(location)+'\n'+str(cur_house_number)+'\n'+self.convert_listuple(self.mapdata.osm[location])+'\n'
 		elif postcode and postcode!=cur_postcode: pass
 		else: continue
 		if msg: print(msg,file=f)
@@ -258,14 +276,14 @@ class GenerateCoordinates(ConnectLivestatus):
 		if house[-6]: city=house[-6]
 		else: city=house[-7]
 		if not house[-3]:
-		    print('Errors@houses with - '+str(house),file=f)
+		    print('Errors@houses with - '+self.convert_listuple(house),file=f)
 		    continue
 		else: name=str(house[0])+'-'+str(city)+'-'+str(house[-1])+'-'+str(house[-3])+'-'+str(house[-2])
 	    else:
 		if house[-5]: city=house[-5]
 		else: city=house[-6]
 		if not house[-2]:
-		    print('Errors@houses with - '+str(house),file=f)
+		    print('Errors@houses with - '+self.convert_listuple(house),file=f)
 		    continue
 		else: name=str(house[0])+'-'+str(city)+'-'+str(house[-2])+'-'+str(house[-1])
 	    self.create_nagvis_conf('houses',name,self.houses[house])
@@ -275,21 +293,21 @@ class GenerateCoordinates(ConnectLivestatus):
 		if road[-4]: city=road[-4]
 		else: city=road[-5]
 		if not road[-2]: 
-		    print('Errors@roads with - '+str(road),file=f)
+		    print('Errors@roads with - '+self.convert_listuple(road),file=f)
 		    continue
 		else: name=str(road[0])+'-'+str(city)+'-'+str(road[-1])+'-'+str(road[-2])
 	    else:
 		if road[-3]: city=road[-3]
 		else: city=road[-4]
 		if not road[-1]: 
-		    print('Errors@roads with - '+str(road),file=f)
+		    print('Errors@roads with - '+self.convert_listuple(road),file=f)
 		    continue
 		else: name=str(road[0])+'-'+str(city)+'-'+str(road[-1])
 	    self.create_nagvis_conf('roads',name,self.roads[road])
 
 	for suburb in self.suburbs:
-	    if not suburb[-1]: 
-		print('Errors@suburbs with - '+str(suburb),file=f)
+	    if not suburb[-1]:
+		print('Errors@suburbs with - '+self.convert_listuple(suburb),file=f)
 		continue
 	    if suburb[-3]: name=str(suburb[0])+'-'+str(suburb[-3])+'-'+str(suburb[-1])
 	    else: name=str(suburb[0])+'-'+str(suburb[-4])+'-'+str(suburb[-1])
@@ -297,7 +315,7 @@ class GenerateCoordinates(ConnectLivestatus):
 
 	for district in self.districts:
 	    if not district[-1]: 
-		print('Errors@districts with - '+str(district),file=f)
+		print('Errors@districts with - '+self.convert_listuple(district),file=f)
 		continue
 	    if district[-2]: name=str(district[0])+'-'+str(district[-2])+'-'+str(district[-1])
 	    else: name=str(district[0])+'-'+str(district[-3])+'-'+str(district[-1])
@@ -305,7 +323,7 @@ class GenerateCoordinates(ConnectLivestatus):
 
 	for city in self.cities:
 	    if not city[-1]: 
-		print('Errors@cities with - '+str(city),file=f)
+		print('Errors@cities with - '+self.convert_listuple(city),file=f)
 		continue
 	    if city[-2]: name=str(city[0])+'-'+str(city[-2])+'-'+str(city[-1])
 	    else: name=str(city[0])+'-'+str(city[-3])+'-'+str(city[-1])
@@ -313,7 +331,7 @@ class GenerateCoordinates(ConnectLivestatus):
 
 	for county in self.counties:
 	    if not county[-1]: 
-		print('Errors@counties with - '+str(county),file=f)
+		print('Errors@counties with - '+self.convert_listuple(county),file=f)
 		continue
 	    if county[-2]: name=str(county[0])+'-'+str(county[-2])+'-'+str(county[-1])
 	    else: name=str(county[0])+'-'+str(county[-2])+'-'+str(county[-1])
@@ -321,15 +339,15 @@ class GenerateCoordinates(ConnectLivestatus):
 
 	for admin in self.administratives:
 	    if not admin[-1]: 
-		print('Errors@administratives with - '+str(admin),file=f)
+		print('Errors@administratives with - '+self.convert_listuple(admin),file=f)
 		continue
-	    if not admin[0]: print('Errors@administratives with - '+str(admin),file=f)
+	    if not admin[0]: print('Errors@administratives with - '+self.convert_listuple(admin),file=f)
 	    else: name=str(admin[0])+'-'+admin[-1]
 	    self.create_nagvis_conf('administratives',name,self.administratives[admin])
 
 	for country in self.countries:
 	    if not country[0]: 
-		print('Errors@countries with - '+str(country),file=f)
+		print('Errors@countries with - '+self.convert_listuple(country),file=f)
 		continue
 	    else: name=country[0]
 	    self.create_nagvis_conf('countries',name,self.countries[country])
