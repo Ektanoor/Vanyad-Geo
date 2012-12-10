@@ -9,8 +9,10 @@ WARNING - This is a work in progress, so expect big changes to the code. And not
 
 Presently, the main script is vanyad_latlon.py. This is a command-line utility to create a series of configurations 
 for the geomap utility on Nagvis. It uses Openstreetmap's Nominatim to gather geoinformation, based only on 
-physical addresses of Nagios/Icinga objects. It works based on a costum variable written to the object in Nagios/Icinga 
-configuration (presently only hosts work, but with little code tweaking one can use for other objects)
+physical addresses of Nagios/Icinga objects. It works based on a costum variable added to the object in Nagios/Icinga 
+configuration (presently only "host" work, but with little code tweaking it can be used for other objects).
+
+It presently requires Livestatus to work.
 
 
 
