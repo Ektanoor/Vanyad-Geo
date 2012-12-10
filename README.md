@@ -1,13 +1,17 @@
 Vanyad-Geo
 ==========
 
-A separate project for geolocation analysis
+A separate project for geolocation analysis. 
 
 WARNING - This is a work in progress, so expect big changes to the code. And note - there is NO WARRANTIES whatsoever.
           This code is under GPLv2, so it's kiss it or kick it.
 
 
-Presently, the main script is vanyad_latlon.py. It creates a series of configurations for the geomap utility in Nagvis.
+Presently, the main script is vanyad_latlon.py. This is a command-line utility to create a series of configurations 
+for the geomap utility on Nagvis. It uses Openstreetmap's Nominatim to gather geoinformation, based only on 
+physical addresses of Nagios/Icinga objects. It works based on a costum variable written to the object in Nagios/Icinga 
+configuration (presently only hosts work, but with little code tweaking one can use for other objects)
+
 
 
 ------------
